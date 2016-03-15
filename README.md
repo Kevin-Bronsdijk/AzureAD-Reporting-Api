@@ -29,7 +29,7 @@ var connection = AzureConnection.Create(
                 );
 
 var client = new AzureAdReportingClient(connection);
-var auditEvents = test.GetAuditEvents();
+var auditEvents = client.GetAuditEvents();
 
 ```
 
