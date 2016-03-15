@@ -7,7 +7,7 @@ Azure graph API wrapper for retrieving active directory reporting information on
 * [Samples](#samples)
 
 ## Introduction
-Simple and light way solution of accessing active directory reporting information in .NET projects. Currently only **auditEvents** has been implemented and will implement the other missing reports and filters as soon as I required this functionality.
+Simple and light way solution for accessing active directory reporting information in .NET projects. Currently only implemented report **auditEvents** but will implement the missing reports and filters as soon as I required this functionality. This also includes the release of a Nuget Package.
 
 ### Requirements
 
