@@ -1,6 +1,6 @@
 Azure AD Reporting Api
 =============
-Azure graph API wrapper for retrieving active directory reporting information only.
+Azure graph API wrapper for retrieving active directory reporting information.
 
 * [Introduction](#introduction)
 * [Requirements](#requirements)
