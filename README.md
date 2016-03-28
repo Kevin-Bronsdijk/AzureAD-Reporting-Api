@@ -15,7 +15,7 @@ Active Directory application and service principal - [details](https://azure.mic
 
 ### Samples
 
-**Request:**
+**Create a client:**
 
 ```C#
 using AzureADReportingApi;
@@ -29,7 +29,21 @@ var connection = AzureConnection.Create(
                 );
 
 var client = new AzureAdReportingClient(connection);
+
+```
+
+**Request with default filters:**
+
+```C#
+
 var auditEvents = client.GetAuditEvents();
 
 ```
 
+**Request with filter:**
+
+```C#
+
+var auditEvents = client.GetAuditEvents(DateTime.UtcNow.AddDays(-5), DateTime.UtcNow);
+
+```
