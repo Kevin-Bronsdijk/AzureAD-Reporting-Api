@@ -59,8 +59,7 @@ namespace AzureADReportingApi.Http
             };
         }
 
-        public static AzureConnection Create(string clientId, string clientSecret, string tenantDomain,
-            IWebProxy proxy = null)
+        public static AzureConnection Create(string clientId, string clientSecret, string tenantDomain, IWebProxy proxy = null)
         {
             if (string.IsNullOrEmpty(tenantDomain))
                 throw new ArgumentException();
@@ -73,28 +72,60 @@ namespace AzureADReportingApi.Http
             return new AzureConnection(clientId, clientSecret, tenantDomain, handler);
         }
 
-        internal async Task<IApiResponse<TResponse>> Execute<TResponse>(ApiRequest request,
-            CancellationToken cancellationToken)
+        internal async Task<IApiResponse<TResponse>> Execute<TResponse>(ApiRequest request, CancellationToken cancellationToken)
         {
-            using (var requestMessage = new HttpRequestMessage(request.Method, request.Uri))
+            using (var requestMessage = BuildRequest(request))
             {
-                requestMessage.Headers.Add("Authorization", "Bearer " + await GetAccessToken());
-
-                using (
-                    var responseMessage =
-                        await _client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false))
+                using (var responseMessage = await _client.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false))
                 {
                     return await BuildResponse<TResponse>(responseMessage, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
 
+        private HttpRequestMessage BuildRequest(IApiRequest request)
+        {
+            var requestMessage = new HttpRequestMessage(request.Method, request.RequestUrl());
+            requestMessage.Headers.Add("Authorization", "Bearer " +  GetAccessToken().Result);
+            return requestMessage;
+        }
+
+        private async Task<IApiResponse<TResponse>> BuildResponse<TResponse>(HttpResponseMessage message, CancellationToken cancellationToken)
+        {
+            var response = new ApiResponse<TResponse>
+            {
+                StatusCode = message.StatusCode,
+                Success = message.IsSuccessStatusCode
+            };
+
+            if (message.Content != null)
+            {
+                if (message.IsSuccessStatusCode)
+                {
+                    // Debugging / var test = message.Content.ReadAsStringAsync().Result;
+
+                    response.Body = await message.Content.ReadAsAsync<TResponse>(
+                        new[] {_formatter}, cancellationToken).ConfigureAwait(false);
+                }
+                else
+                {
+                    var errorResponse = await message.Content.ReadAsAsync<ErrorResult>(cancellationToken).ConfigureAwait(false);
+
+                    if (errorResponse != null)
+                    {
+                        response.Error = errorResponse.Error;
+                    }
+                }
+            }
+
+            return response;
+        }
+
         private async Task<string> GetAccessToken()
         {
             if (!IsValidToken())
             {
-                var authContext =
-                    new AuthenticationContext($"{AuthenticationContextAuthority}/{$"{TenantDomain}{Domain}"}");
+                var authContext = new AuthenticationContext($"{AuthenticationContextAuthority}/{$"{TenantDomain}{Domain}"}");
                 var credential = new ClientCredential(_clientId, _clientSecret);
                 var result = await authContext.AcquireTokenAsync(GraphResourceId, credential);
 
@@ -110,42 +141,6 @@ namespace AzureADReportingApi.Http
             return _accessToken != null &&
                    DateTime.UtcNow < _tokenCreationDateTime.AddMinutes(TokenCredentialsTimeToLiveInMinutes);
         }
-
-        private async Task<IApiResponse<TResponse>> BuildResponse<TResponse>(HttpResponseMessage message,
-            CancellationToken cancellationToken)
-        {
-            var response = new ApiResponse<TResponse>
-            {
-                StatusCode = message.StatusCode,
-                Success = message.IsSuccessStatusCode
-            };
-
-            if (message.Content != null)
-            {
-                if (message.IsSuccessStatusCode)
-                {
-                    // Debugging / var test = message.Content.ReadAsStringAsync().Result;
-
-                    response.Body =
-                        await
-                            message.Content.ReadAsAsync<TResponse>(new[] {_formatter}, cancellationToken)
-                                .ConfigureAwait(false);
-                }
-                else
-                {
-                    var errorResponse =
-                        await message.Content.ReadAsAsync<ErrorResult>(cancellationToken).ConfigureAwait(false);
-
-                    if (errorResponse != null)
-                    {
-                        response.Error = errorResponse.Error;
-                    }
-                }
-            }
-
-            return response;
-        }
-
         ~AzureConnection()
         {
             Dispose(false);

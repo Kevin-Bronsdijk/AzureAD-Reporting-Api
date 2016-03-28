@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureADReportingApi", "AzureADReportingApi\AzureADReportingApi.csproj", "{FFB7FF1D-8209-4324-9FC5-E922D79CCC9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureADReportingApiTest", "AzureADReportingApiTest\AzureADReportingApiTest.csproj", "{5811B8F8-A480-498D-92E1-71AA8DFFDFB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FFB7FF1D-8209-4324-9FC5-E922D79CCC9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFB7FF1D-8209-4324-9FC5-E922D79CCC9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFB7FF1D-8209-4324-9FC5-E922D79CCC9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5811B8F8-A480-498D-92E1-71AA8DFFDFB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5811B8F8-A480-498D-92E1-71AA8DFFDFB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5811B8F8-A480-498D-92E1-71AA8DFFDFB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5811B8F8-A480-498D-92E1-71AA8DFFDFB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

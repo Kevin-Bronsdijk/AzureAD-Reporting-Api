@@ -1,33 +1,55 @@
-﻿using System.Net.Http;
-using AzureADReportingApi.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 
 namespace AzureADReportingApi.Http
 {
     internal class ApiRequest : IApiRequest
     {
-        private const string GraphResourceId = "https://graph.windows.net";
-
-        public ApiRequest(IRequest body) : this(body, HttpMethod.Get)
+        public ApiRequest(string uri) : this(uri, HttpMethod.Get)
         {
         }
 
-        public ApiRequest(IRequest body, HttpMethod httpMethod)
+        public ApiRequest(string uri, HttpMethod httpMethod)
         {
+            Uri = uri;
             Method = httpMethod;
-            Body = body;
-            Uri = GetAuditEventsUrl(Body.RequestParameters.TenantDomain,
-                Body.RequestParameters.ReportName);
+            QueryParameters = new List<Tuple<string, string>>();
         }
 
         public string Uri { get; set; }
         public HttpMethod Method { get; set; }
-        public IRequest Body { get; set; }
+        public List<Tuple<string, string>> QueryParameters { get; set;}
 
-        public static string GetAuditEventsUrl(string tenantDomain, string reportName)
+        public void AddQueryParameter(string key, string value)
         {
-            var url = $"{GraphResourceId}/{tenantDomain}/reports/{reportName}?api-version=beta";
+            QueryParameters.Add(new Tuple<string, string>(key, value));
+        }
 
-            return url;
+        public void AddQueryParameter(string key, IEnumerable<string> values)
+        {
+            foreach (var value in values)
+            {
+                QueryParameters.Add(new Tuple<string, string>(key, value));
+            }
+        }
+
+        public string RequestUrl()
+        {
+            var url = $"{ApiConstants.GraphResourceBaseUrl}/{Uri}";
+
+            var parameters = QueryParameters.Select(
+                p => FormatQueryStringParameter(p.Item1, p.Item2)).ToList();
+
+            parameters.Add(FormatQueryStringParameter("api-version", ApiConstants.Version));
+            return url + "?" + string.Join("&", parameters);
+        }
+
+        private static string FormatQueryStringParameter(string key, string value)
+        {
+            return $"{System.Uri.EscapeUriString(key)}={WebUtility.UrlEncode(value)}";
         }
     }
 }
