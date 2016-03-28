@@ -102,7 +102,7 @@ namespace AzureADReportingApi.Http
             {
                 if (message.IsSuccessStatusCode)
                 {
-                    // Debugging / var test = message.Content.ReadAsStringAsync().Result;
+                    // Debugging /  var test = message.Content.ReadAsStringAsync().Result;
 
                     response.Body = await message.Content.ReadAsAsync<TResponse>(
                         new[] {_formatter}, cancellationToken).ConfigureAwait(false);

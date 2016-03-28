@@ -26,6 +26,23 @@ namespace AzureADReportingApi
             return new ApiRequest(string.Format($"{_connection.TenantDomain}/reports/{reportName}"));
         }
 
+        public Task<IApiResponse<AzureReports>> GetReports()
+        {
+            return GetReports(default(CancellationToken));
+        }
+
+        public Task<IApiResponse<AzureReports>> GetReports(CancellationToken cancellationToken)
+        {
+            var request = new ApiRequest(string.Format($"{_connection.TenantDomain}/reports"));
+
+            var message = _connection.Execute<AzureReports>(
+                request,
+                cancellationToken
+            );
+
+            return message;
+        }
+
         public Task<IApiResponse<AuditEvents>> GetAuditEvents()
         {
             return GetAuditEvents(default(CancellationToken));

@@ -64,6 +64,8 @@
     <Compile Include="Http\IApiResponse.cs" />
     <Compile Include="Http\IApiRequest.cs" />
     <Compile Include="Models\AuditEvents.cs" />
+    <Compile Include="Models\AzureReports.cs" />
+    <Compile Include="Models\Report.cs" />
     <Compile Include="Models\RoleDetail.cs" />
     <Compile Include="Models\ErrorResult.cs" />
     <Compile Include="Models\Value.cs" />

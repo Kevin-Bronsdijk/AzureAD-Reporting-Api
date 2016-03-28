@@ -11,28 +11,6 @@ namespace AzureADReportingApiTest
     [TestClass]
     public class Tests
     {
-        private const string ClientId = "";
-        private const string ClientSecret = "";
-        private const string TenantDomain = "";
-
-        private static AzureConnection GetAzureConnection()
-        {
-            return AzureConnection.Create(
-                ClientId,
-                ClientSecret,
-                TenantDomain
-                );
-        }
-
-        private static AzureConnection GetAzureConnectionFakeId()
-        {
-            return AzureConnection.Create(
-                "a",
-                "b",
-                "c"
-                );
-        }
-
         [TestMethod]
         public void TestConnection_ClientIdIsEmptyException_True()
         {
@@ -51,7 +29,6 @@ namespace AzureADReportingApiTest
                 Assert.IsTrue(true);
             }
         }
-
 
         [TestMethod]
         public void TestConnection_ClientSecretIsEmptyException_True()
@@ -94,7 +71,7 @@ namespace AzureADReportingApiTest
         [TestMethod]
         public void TestReport_AuditEventsCallFakeClientFail_True()
         {
-            var client = new AzureAdReportingClient(GetAzureConnectionFakeId());
+            var client = new AzureAdReportingClient(HelperFunctions.GetAzureConnectionFakeId());
 
             try
             {
@@ -111,7 +88,7 @@ namespace AzureADReportingApiTest
         [TestMethod]
         public void TestReport_AuditEventsCallSuccess_True()
         {
-            var client = new AzureAdReportingClient(GetAzureConnection());
+            var client = new AzureAdReportingClient(HelperFunctions.GetAzureConnection());
 
             try
             {
@@ -128,11 +105,28 @@ namespace AzureADReportingApiTest
         [TestMethod]
         public void TestReport_AuditEventsCallSuccessWithFilter_True()
         {
-            var client = new AzureAdReportingClient(GetAzureConnection());
+            var client = new AzureAdReportingClient(HelperFunctions.GetAzureConnection());
 
             try
             {
                 var task = client.GetAuditEvents(DateTime.UtcNow.AddDays(-5), DateTime.UtcNow.AddDays(2));
+
+                Assert.IsTrue(task.Result != null && task.Result.Success);
+            }
+            catch (Exception)
+            {
+                Assert.IsTrue(false, "Exception");
+            }
+        }
+
+        [TestMethod]
+        public void TestReport_ReportsCallSuccess_True()
+        {
+            var client = new AzureAdReportingClient(HelperFunctions.GetAzureConnection());
+
+            try
+            {
+                var task = client.GetReports();
 
                 Assert.IsTrue(task.Result != null && task.Result.Success);
             }
