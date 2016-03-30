@@ -13,12 +13,12 @@ open Fake.AssemblyInfoFile
 let project = "Azure AD Reporting Api"
 let authors = ["Kevin Bronsdijk"]
 let summary = "Azure AD Reporting Api"
-let version = "1.0.1.0"
+let version = "1.0.1.2"
 let description = """
 Azure graph API wrapper for retrieving active directory reporting information.
 """
 let notes = ""
-let nugetVersion = "1.1.1"
+let nugetVersion = "1.1.2"
 let tags = "Azure AD Audit Reports Reporting"
 let gitHome = "https://github.com/Kevin-Bronsdijk"
 let gitName = "AzureAD-Reporting-Api"
