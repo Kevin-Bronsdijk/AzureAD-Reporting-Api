@@ -127,7 +127,10 @@ namespace AzureADReportingApi.Http
             {
                 var authContext = new AuthenticationContext($"{AuthenticationContextAuthority}/{$"{TenantDomain}{Domain}"}");
                 var credential = new ClientCredential(_clientId, _clientSecret);
-                var result = await authContext.AcquireTokenAsync(GraphResourceId, credential);
+
+                // Can't use AcquireTokenAsync due to a bug
+                // http://stackoverflow.com/questions/32594642/azure-keyvault-active-directory-acquiretokenasync-timeout-when-called-asynchrono
+                var result = authContext.AcquireToken(GraphResourceId, credential);
 
                 _accessToken = result.CreateAuthorizationHeader().Substring("Bearer ".Length);
                 _tokenCreationDateTime = DateTime.UtcNow;
