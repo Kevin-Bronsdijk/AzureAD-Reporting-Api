@@ -69,8 +69,7 @@ namespace AzureADReportingApi
         {
             var request = GetApiRequest("auditEvents");
 
-            string filter =
-                $"eventTime ge {@from.ToString("yyyy-MM-dd")} and eventTime le {till.ToString("yyyy-MM-dd")}";
+            string filter = $"eventTime ge {@from.ToString("o")} and eventTime le {till.ToString("o")}";
             
             request.AddQueryParameter("$filter", filter);
             

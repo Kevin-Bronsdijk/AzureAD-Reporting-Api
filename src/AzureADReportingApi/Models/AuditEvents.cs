@@ -6,6 +6,6 @@ namespace AzureADReportingApi.Models
     public class AuditEvents
     {
         [JsonProperty("value")]
-        public List<Value> Value { get; set; }
+        public List<AuditEvent> AuditEvent { get; set; }
     }
 }

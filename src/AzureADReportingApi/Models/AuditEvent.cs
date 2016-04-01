@@ -1,14 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace AzureADReportingApi.Models
 {
-    public class Value
+    public class AuditEvent
     {
         [JsonProperty("id")]
         public string Id { get; set; }
 
         [JsonProperty("eventTime")]
-        public string EventTime { get; set; }
+        public DateTime EventTime { get; set; }
 
         [JsonProperty("actor")]
         public string Actor { get; set; }

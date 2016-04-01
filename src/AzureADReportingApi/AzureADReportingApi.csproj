@@ -68,7 +68,7 @@
     <Compile Include="Models\Report.cs" />
     <Compile Include="Models\RoleDetail.cs" />
     <Compile Include="Models\ErrorResult.cs" />
-    <Compile Include="Models\Value.cs" />
+    <Compile Include="Models\AuditEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
